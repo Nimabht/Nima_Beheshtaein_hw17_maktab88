@@ -1,5 +1,5 @@
 const { AppError } = require("../utils/appError.js");
-const Company = require("../models/company.js");
+const { Company } = require("../models/company.js");
 const isValidObjectId = require("../validator/ObjectId.js");
 module.exports = async function (req, res, next) {
   try {
