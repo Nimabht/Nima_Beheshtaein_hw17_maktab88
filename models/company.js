@@ -76,4 +76,33 @@ const companySchema = mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Company", companySchema);
+const validateCompany = (company) => {
+  const schema = Joi.object({
+    name: Joi.string().min(3).max(255).required(),
+    registrationNumber: Joi.string().length(11).required(),
+    province: Joi.string()
+      .required()
+      .custom((value, helpers) => {
+        if (!isValidProvince(value)) {
+          return helpers.message("Invalid province");
+        }
+        return value;
+      }),
+    city: Joi.string()
+      .required()
+      .custom((value, helpers) => {
+        if (!checkValidCity(this.province, value)) {
+          return helpers.message("Invalid city");
+        }
+        return value;
+      }),
+    landLineNumber: Joi.string()
+      .regex(/^0\d{2,3}-\d{7}$/)
+      .required(),
+    registrationDate: Joi.date().default(Date.now).forbidden(),
+  });
+  return schema.validate(company);
+};
+
+module.exports.Company = mongoose.model("Company", companySchema);
+module.exports.validateCompany = validateCompany;
