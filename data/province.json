@@ -239,5 +239,11 @@
         "Abhar",
         "Khorramdarreh"
       ]
+    },
+     {
+      "name": "not-set",
+      "cities": [
+        "not-set"
+      ]
     }
    ]
