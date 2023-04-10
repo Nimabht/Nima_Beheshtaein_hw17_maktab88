@@ -2,7 +2,8 @@ const express = require("express");
 const Joi = require("joi");
 const JoiObjectId = require("joi-objectid");
 require("./db/connection.js");
-// import globalErrorHandler from "./middlewares/globalErrorHandler.js";
+const companies = require("./routers/companies.js");
+const globalErrorHandler = require("./middlewares/globalErrorHandler");
 // import employees from "./routes/employees.js";
 // import { dirname, join } from "path";
 // import { fileURLToPath } from "url";
@@ -16,6 +17,7 @@ app.set("views", "./views");
 
 app.use(express.json());
 
+app.use("/api/companies", companies);
 // app.use("/api/employee", employees);
 
 // app.get("/home", (req, res) => {
@@ -38,7 +40,7 @@ app.use(express.json());
 //   res.sendFile(filePath);
 // });
 
-// app.use(globalErrorHandler);
+app.use(globalErrorHandler);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
