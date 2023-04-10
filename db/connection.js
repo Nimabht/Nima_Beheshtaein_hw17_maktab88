@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 mongoose
-  .connect("mongodb://localhost:27017/HW16-employee")
+  .connect("mongodb://localhost:27017/HW17")
   .then(() => {
     console.log("MongoDB connected!");
   })

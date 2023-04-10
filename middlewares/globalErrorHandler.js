@@ -21,7 +21,7 @@ const options = {
   },
   dataBase: {
     level: "error",
-    db: "mongodb://localhost/HW16-employee",
+    db: "mongodb://localhost/HW17",
   },
 };
 

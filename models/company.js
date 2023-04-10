@@ -54,7 +54,7 @@ const companySchema = mongoose.Schema({
     required: true,
     validate: {
       validator: function (city) {
-        return checkValidCity(this.province, checkValidCity);
+        return checkValidCity(this.province, city);
       },
       message: "Invalid city",
     },
@@ -91,14 +91,19 @@ const validateCompany = (company) => {
     city: Joi.string()
       .required()
       .custom((value, helpers) => {
-        if (!checkValidCity(this.province, value)) {
+        if (!checkValidCity(company.province, value)) {
           return helpers.message("Invalid city");
         }
         return value;
       }),
     landLineNumber: Joi.string()
       .regex(/^0\d{2,3}-\d{7}$/)
-      .required(),
+      .required()
+      .messages({
+        "string.pattern.base":
+          "Phone number must be in 0XX-XXXXXXX format",
+        "any.required": "Phone number is required",
+      }),
     registrationDate: Joi.date().default(Date.now).forbidden(),
   });
   return schema.validate(company);
