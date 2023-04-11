@@ -121,7 +121,7 @@ module.exports = {
     });
     if (existingCompany) {
       const ex = new AppError(
-        "Use registration number.",
+        "Use another registration number.",
         "fail",
         400
       );
