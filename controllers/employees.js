@@ -45,12 +45,12 @@ module.exports = {
     const skipCount = (page - 1) * pageSize;
     const resEmployees = await Employee.find(filter);
     const count = resEmployees.length;
-    const employees = await Employee.find(filter)
+    let employees = await Employee.find(filter)
       .sort(sort)
       .skip(skipCount)
       .limit(pageSize)
+      .populate("company", "name _id")
       .select("-__v");
-
     res.send({ page: page, total: count, data: employees });
   },
   getEmployeeById: async (req, res, next) => {
