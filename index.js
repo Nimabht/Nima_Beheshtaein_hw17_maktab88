@@ -5,7 +5,7 @@ require("./db/connection.js");
 const companies = require("./routers/companies.js");
 const employees = require("./routers/employees.js");
 const globalErrorHandler = require("./middlewares/globalErrorHandler");
-// import { dirname, join } from "path";
+const { join } = require("path");
 // import { fileURLToPath } from "url";
 //--------------------------------------------------------------------------
 Joi.objectId = JoiObjectId(Joi);
@@ -20,25 +20,40 @@ app.use(express.json());
 app.use("/api/company", companies);
 app.use("/api/employee", employees);
 
-// app.get("/home", (req, res) => {
-//   const filePath = join(__dirname, "views", "home.html");
-//   res.sendFile(filePath);
-// });
+app.get("/companies", (req, res) => {
+  const filePath = join(__dirname, "views", "companies.html");
+  res.sendFile(filePath);
+});
 
-// app.get("/profile/:id", (req, res) => {
-//   const filePath = join(__dirname, "views", "profile.html");
-//   res.sendFile(filePath);
-// });
+app.get("/company/profile/:id", (req, res) => {
+  const filePath = join(__dirname, "views", "company-profile.html");
+  res.sendFile(filePath);
+});
 
-// app.get("/edit/:id", (req, res) => {
-//   const filePath = join(__dirname, "views", "edit.html");
-//   res.sendFile(filePath);
-// });
+app.get("/company/edit/:id", (req, res) => {
+  const filePath = join(__dirname, "views", "company-edit.html");
+  res.sendFile(filePath);
+});
 
-// app.get("/new", (req, res) => {
-//   const filePath = join(__dirname, "views", "new.html");
-//   res.sendFile(filePath);
-// });
+app.get("/employees", (req, res) => {
+  const filePath = join(__dirname, "views", "employees.html");
+  res.sendFile(filePath);
+});
+
+app.get("/employee/profile/:id", (req, res) => {
+  const filePath = join(__dirname, "views", "employee-profile.html");
+  res.sendFile(filePath);
+});
+
+app.get("/employee/edit/:id", (req, res) => {
+  const filePath = join(__dirname, "views", "employee-edit.html");
+  res.sendFile(filePath);
+});
+
+app.get("/employee/new", (req, res) => {
+  const filePath = join(__dirname, "views", "employee-new.html");
+  res.sendFile(filePath);
+});
 
 app.use(globalErrorHandler);
 
