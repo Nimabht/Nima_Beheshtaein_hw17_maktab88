@@ -7,9 +7,9 @@ module.exports = async function (req, res, next) {
       const ex = new AppError("Invalid Id", "fail", 400);
       return next(ex);
     }
-    const employee = await Employee.findById(req.params.id).select(
-      "-__v"
-    );
+    const employee = await Employee.findById(req.params.id)
+      .populate("company", "name _id")
+      .select("-__v");
     if (!employee) {
       const ex = new AppError("Employee not found", "fail", 404);
       return next(ex);
