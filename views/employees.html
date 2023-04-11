@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp"
+      crossorigin="anonymous" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="/css/employees.css" />
+    <title>Home</title>
+  </head>
+  <body
+    class="vh-100 d-flex flex-row justify-content-center align-items-center gap-4 p-4">
+    <div
+      class="container w-25 h-90 bg-light rounded-5 d-flex flex-column align-items-center gap-1">
+      <p class="display-4 my-3"><b>Filters</b></p>
+      <div class="form-group">
+        <input
+          type="text"
+          class="form-control"
+          id="srch-province"
+          placeholder="Province" />
+      </div>
+      <div class="form-group">
+        <input
+          type="text"
+          class="form-control"
+          id="srch-age"
+          placeholder="Age more than :" />
+      </div>
+      <div class="form-group">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="srch-phonenumber" />
+        <label class="form-check-label" for="srch-phonenumber">
+          Only One number
+        </label>
+      </div>
+      <div class="form-group border border-black rounded-3 p-2 w-75">
+        <p>Gender:</p>
+        <input type="radio" id="srch-man" name="gender" value="man" />
+          <label for="srch-man">Man</label><br />
+        <input
+          type="radio"
+          id="srch-woman"
+          name="gender"
+          value="woman" />
+          <label for="srch-woman">Woman</label><br />
+      </div>
+      <div class="form-group border border-black rounded-3 p-2 w-75">
+        <p>Role:</p>
+        <input
+          type="radio"
+          id="srch-employee"
+          name="role"
+          value="Employee" />
+          <label for="srch-employee">Employee</label><br />
+        <input
+          type="radio"
+          id="srch-manager"
+          name="role"
+          value="Manager" />
+          <label for="srch-manager">Manager</label><br />
+      </div>
+      <div class="form-group">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="registeredLastWeek" />
+        <label class="form-check-label" for="srch-registeredLastWeek">
+          Registered recently
+        </label>
+      </div>
+      <div class="form-group border border-black rounded-3 p-3 w-75">
+        <p>Sort age by:</p>
+        <input
+          type="radio"
+          id="srch-Asc"
+          name="sortBy"
+          value="ageAsc" />
+          <label for="srch-employee">Asc</label><br />
+        <input
+          type="radio"
+          id="srch-Desc"
+          name="sortBy"
+          value="ageDesc" />
+          <label for="srch-manager">Desc</label><br />
+      </div>
+      <div>
+        <button id="srch-submit" class="btn btn-success">
+          Apply
+        </button>
+        <button id="srch-reset" class="btn btn-dark">Reset</button>
+      </div>
+    </div>
+    <div
+      class="container w-75 h-90 bg-light rounded-5 d-flex flex-column align-items-center">
+      <p class="display-4 my-3"><b>Employees</b></p>
+      <table class="table w-90 shadow"></table>
+      <button
+        class="btn btn-success mb-3 px-lg-5"
+        onclick="window.location.href = '/employee/new';">
+        New
+      </button>
+      <nav aria-label="Page navigation example ">
+        <ul class="pagination"></ul>
+      </nav>
+    </div>
+  </body>
+  <script
+    src="https://code.jquery.com/jquery-3.6.4.min.js"
+    integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="/js/employees/renderContainer.js"></script>
+  <script src="/js/employees/searchQuery.js"></script>
+  <script src="/js/employees/resetFilters.js"></script>
+  <script src="/js/employees/employees.js"></script>
+</html>
