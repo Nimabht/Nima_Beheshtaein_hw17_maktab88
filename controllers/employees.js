@@ -7,40 +7,40 @@ module.exports = {
     const page = parseInt(req.query.page) || 1;
     const filter = {};
     let sort = { registrationDate: -1 };
-    // if (req.query.province) {
-    //   filter.province = req.query.province;
-    // }
-    // if (req.query.age) {
-    //   const today = new Date();
-    //   const ageLimitDate = new Date(
-    //     today.getFullYear() - req.query.age,
-    //     today.getMonth(),
-    //     today.getDate()
-    //   );
-    //   filter.dateOfBirth = { $lte: ageLimitDate };
-    // }
-    // if (req.query.phone) {
-    //   filter.phoneNumber = { $size: 1 };
-    // }
-    // if (req.query.role) {
-    //   filter.roleInCompany = req.query.role;
-    // }
-    // if (req.query.gender) {
-    //   filter.gender = req.query.gender;
-    // }
-    // if (req.query.registeredLastWeek) {
-    //   const oneWeekAgo = new Date();
-    //   oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-    //   filter.registrationDate = { $gte: oneWeekAgo };
-    // }
-    // if (req.query.sortBy === "ageAsc") {
-    //   sort = { dateOfBirth: 1 };
-    // }
+    if (req.query.province) {
+      filter.province = req.query.province;
+    }
+    if (req.query.age) {
+      const today = new Date();
+      const ageLimitDate = new Date(
+        today.getFullYear() - req.query.age,
+        today.getMonth(),
+        today.getDate()
+      );
+      filter.dateOfBirth = { $lte: ageLimitDate };
+    }
+    if (req.query.phone) {
+      filter.phoneNumber = { $size: 1 };
+    }
+    if (req.query.role) {
+      filter.roleInCompany = req.query.role;
+    }
+    if (req.query.gender) {
+      filter.gender = req.query.gender;
+    }
+    if (req.query.registeredLastWeek) {
+      const oneWeekAgo = new Date();
+      oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+      filter.registrationDate = { $gte: oneWeekAgo };
+    }
+    if (req.query.sortBy === "ageAsc") {
+      sort = { dateOfBirth: 1 };
+    }
 
-    // // Sorting by age in descending order
-    // if (req.query.sortBy === "ageDesc") {
-    //   sort = { dateOfBirth: -1 };
-    // }
+    // Sorting by age in descending order
+    if (req.query.sortBy === "ageDesc") {
+      sort = { dateOfBirth: -1 };
+    }
     const pageSize = 6;
     const skipCount = (page - 1) * pageSize;
     const resEmployees = await Employee.find(filter);
