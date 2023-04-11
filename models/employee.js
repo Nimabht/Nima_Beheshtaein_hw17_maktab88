@@ -6,82 +6,85 @@ const isValidProvince = (province) => {
   return validProvinces.some((p) => p.name === province);
 };
 
-const employeeSchema = mongoose.Schema({
-  firstname: {
-    type: String,
-    required: true,
-    minlength: 3,
-    maxlength: 30,
-  },
-  lastname: {
-    type: String,
-    required: true,
-    minlength: 3,
-    maxlength: 30,
-  },
-  gender: {
-    type: String,
-    enum: ["man", "woman", "unknown", "not-set"],
-    default: "not-set",
-  },
-  dateOfBirth: {
-    type: Date,
-    required: true,
-  },
-  phoneNumber: {
-    type: [String],
-    required: true,
-    validate: {
-      validator: function (v) {
-        // Check that each phone number matches the Iran phone number pattern
-        for (let i = 0; i < v.length; i++) {
-          if (!/^(\+98|0)?9\d{9}$/.test(v[i])) {
-            return false;
+const employeeSchema = mongoose.Schema(
+  {
+    firstname: {
+      type: String,
+      required: true,
+      minlength: 3,
+      maxlength: 30,
+    },
+    lastname: {
+      type: String,
+      required: true,
+      minlength: 3,
+      maxlength: 30,
+    },
+    gender: {
+      type: String,
+      enum: ["man", "woman", "unknown", "not-set"],
+      default: "not-set",
+    },
+    dateOfBirth: {
+      type: Date,
+      required: true,
+    },
+    phoneNumber: {
+      type: [String],
+      required: true,
+      validate: {
+        validator: function (v) {
+          // Check that each phone number matches the Iran phone number pattern
+          for (let i = 0; i < v.length; i++) {
+            if (!/^(\+98|0)?9\d{9}$/.test(v[i])) {
+              return false;
+            }
           }
-        }
-        return true;
+          return true;
+        },
+        message: (props) =>
+          `${props.value} is not a valid Iran phone number!`,
       },
-      message: (props) =>
-        `${props.value} is not a valid Iran phone number!`,
+    },
+    idNumber: {
+      type: String,
+      unique: true,
+      validate: {
+        validator: function (v) {
+          return /^\d{10}$/.test(v);
+        },
+        message: (props) => `${props.value} is not a valid idNumber!`,
+      },
+    },
+    province: {
+      type: String,
+      validate: {
+        validator: function (v) {
+          return !v || isValidProvince(v);
+        },
+        message: (props) =>
+          `${props.value} is not a valid province in Iran!`,
+      },
+      default: "not-set",
+    },
+    company: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Company",
+      required: true,
+    },
+    roleInCompany: {
+      type: String,
+      enum: ["Employee", "Manager"],
+      default: "Employee",
     },
   },
-  idNumber: {
-    type: String,
-    unique: true,
-    validate: {
-      validator: function (v) {
-        return /^\d{10}$/.test(v);
-      },
-      message: (props) => `${props.value} is not a valid idNumber!`,
+  {
+    timestamps: {
+      createdAt: "registrationDate",
+      updatedAt: "updatedAt",
     },
-  },
-  province: {
-    type: String,
-    validate: {
-      validator: function (v) {
-        return !v || isValidProvince(v);
-      },
-      message: (props) =>
-        `${props.value} is not a valid province in Iran!`,
-    },
-    default: "not-set",
-  },
-  company: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Company",
-    required: true,
-  },
-  roleInCompany: {
-    type: String,
-    enum: ["Employee", "Manager"],
-    default: "Employee",
-  },
-  registrationDate: {
-    type: Date,
-    default: Date.now,
-    immutable: true,
-  },
-});
+  }
+);
 
 // Create a unique index on the phoneNumber field
 employeeSchema.index({ phoneNumber: 1 }, { unique: true });

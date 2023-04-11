@@ -20,61 +20,64 @@ function checkValidCity(province, city) {
   return false;
 }
 
-const companySchema = mongoose.Schema({
-  name: {
-    type: String,
-    minlength: 3,
-    maxlength: 255,
-    required: true,
-  },
-  registrationNumber: {
-    type: String,
-    unique: true,
-    validate: {
-      validator: function (v) {
-        return /^\d{11}$/.test(v);
-      },
-      message: (props) =>
-        `${props.value} is not a valid Registration Number!`,
+const companySchema = mongoose.Schema(
+  {
+    name: {
+      type: String,
+      minlength: 3,
+      maxlength: 255,
+      required: true,
     },
-    required: true,
-  },
-  province: {
-    type: String,
-    required: true,
-    validate: {
-      validator: function (province) {
-        return isValidProvince(province);
+    registrationNumber: {
+      type: String,
+      unique: true,
+      validate: {
+        validator: function (v) {
+          return /^\d{11}$/.test(v);
+        },
+        message: (props) =>
+          `${props.value} is not a valid Registration Number!`,
       },
-      message: "Invalid province",
+      required: true,
+    },
+    province: {
+      type: String,
+      required: true,
+      validate: {
+        validator: function (province) {
+          return isValidProvince(province);
+        },
+        message: "Invalid province",
+      },
+    },
+    city: {
+      type: String,
+      required: true,
+      validate: {
+        validator: function (city) {
+          return checkValidCity(this.province, city);
+        },
+        message: "Invalid city",
+      },
+    },
+    landLineNumber: {
+      type: String,
+      required: true,
+      validate: {
+        validator: function (v) {
+          return /^0\d{2,3}-\d{7}$/.test(v);
+        },
+        message: "Invalid landline phone number",
+      },
     },
   },
-  city: {
-    type: String,
-    required: true,
-    validate: {
-      validator: function (city) {
-        return checkValidCity(this.province, city);
-      },
-      message: "Invalid city",
+  {
+    timestamps: {
+      createdAt: "registrationDate",
+      updatedAt: "updatedAt",
     },
-  },
-  landLineNumber: {
-    type: String,
-    required: true,
-    validate: {
-      validator: function (v) {
-        return /^0\d{2,3}-\d{7}$/.test(v);
-      },
-      message: "Invalid landline phone number",
-    },
-  },
-  registrationDate: {
-    type: Date,
-    default: Date.now,
-    immutable: true,
-  },
-});
+  }
+);
 
 const validateCompany = (company) => {
   const schema = Joi.object({
