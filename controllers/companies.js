@@ -3,7 +3,7 @@ const { Company, validateCompany } = require("../models/company");
 const { AppError } = require("../utils/appError");
 module.exports = {
   getCompanies: async (req, res, next) => {
-    const page = parseInt(req.query.page) || 1;
+    const page = parseInt(req.query.page);
     const filter = {};
     let sort = { registrationDate: -1 };
     // if (req.query.province) {
@@ -40,16 +40,22 @@ module.exports = {
     // if (req.query.sortBy === "ageDesc") {
     //   sort = { dateOfBirth: -1 };
     // }
+    let companies;
     const pageSize = 6;
     const skipCount = (page - 1) * pageSize;
     const resCompanies = await Company.find(filter);
     const total = resCompanies.length;
-    const companies = await Company.find(filter)
-      .sort(sort)
-      .skip(skipCount)
-      .limit(pageSize)
-      .select("-__v");
-
+    if (page) {
+      companies = await Company.find(filter)
+        .sort(sort)
+        .skip(skipCount)
+        .limit(pageSize)
+        .select("-__v");
+    } else {
+      companies = await Company.find(filter)
+        .sort(sort)
+        .select("-__v");
+    }
     res.send({ page, total, data: companies });
   },
   getCompanyById: async (req, res, next) => {
