@@ -75,6 +75,13 @@ module.exports = {
       const ex = new AppError(error.details[0].message, "fail", 400);
       return next(ex);
     }
+    //make all phone numbers in +98 format
+    value.phoneNumber = value.phoneNumber.map((phone) => {
+      if (phone.startsWith("0")) {
+        return `+98${phone.slice(1)}`;
+      }
+      return phone;
+    });
     // Check if phone number already exists in database
     let existingEmployee = await Employee.findOne({
       phoneNumber: { $in: value.phoneNumber },

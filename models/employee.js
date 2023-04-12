@@ -47,7 +47,6 @@ const employeeSchema = mongoose.Schema(
       },
       set: (value) => {
         return value.map((phone) => {
-          console.log(phone.startsWith("0"));
           if (phone.startsWith("0")) {
             return `+98${phone.slice(1)}`;
           }
