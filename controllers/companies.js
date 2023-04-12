@@ -14,7 +14,7 @@ module.exports = {
     }
 
     let companies;
-    if (req.query.sortBy === "employeeCountDesc") {
+    if (req.query.sortBy) {
       companies = await Company.aggregate([
         {
           $lookup: {
@@ -30,7 +30,10 @@ module.exports = {
           },
         },
         {
-          $sort: { employeeCount: -1 },
+          $sort: {
+            employeeCount:
+              req.query.sortBy === "employeeCountDesc" ? -1 : 1,
+          },
         },
       ]);
     } else if (req.query.avgAge) {
