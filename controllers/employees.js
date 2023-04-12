@@ -4,7 +4,7 @@ const { Company } = require("../models/company");
 const { AppError } = require("../utils/appError");
 module.exports = {
   getEmployees: async (req, res, next) => {
-    const page = parseInt(req.query.page) || 1;
+    const page = parseInt(req.query.page);
     const filter = {};
     let sort = { registrationDate: -1 };
     if (req.query.province) {
@@ -46,17 +46,23 @@ module.exports = {
     if (companyId) {
       filter.company = companyId; // add company filter to query if companyId is provided
     }
+    let employees;
     const pageSize = 6;
     const skipCount = (page - 1) * pageSize;
     const resEmployees = await Employee.find(filter);
-    const count = resEmployees.length;
-    let employees = await Employee.find(filter)
-      .sort(sort)
-      .skip(skipCount)
-      .limit(pageSize)
-      .populate("company", "name _id")
-      .select("-__v");
-    res.send({ page: page, total: count, data: employees });
+    const total = resEmployees.length;
+    if (page) {
+      employees = await Employee.find(filter)
+        .sort(sort)
+        .skip(skipCount)
+        .limit(pageSize)
+        .select("-__v");
+    } else {
+      employees = await Employee.find(filter)
+        .sort(sort)
+        .select("-__v");
+    }
+    res.send({ page, total, data: employees });
   },
   getEmployeeById: async (req, res, next) => {
     res.send(req.employee);
