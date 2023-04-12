@@ -56,12 +56,18 @@ module.exports = {
         .sort(sort)
         .skip(skipCount)
         .limit(pageSize)
+<<<<<<< HEAD
         .populate("company", "name _id")
+=======
+>>>>>>> bf55df73b800f3364a49fff54fd1184881fe7757
         .select("-__v");
     } else {
       employees = await Employee.find(filter)
         .sort(sort)
+<<<<<<< HEAD
         .populate("company", "name _id")
+=======
+>>>>>>> bf55df73b800f3364a49fff54fd1184881fe7757
         .select("-__v");
     }
     res.send({ page, total, data: employees });
