@@ -1,62 +1,106 @@
 const isValidObjectId = require("../validator/ObjectId");
 const { Company, validateCompany } = require("../models/company");
+const { Employee } = require("../models/employee");
 const { AppError } = require("../utils/appError");
 module.exports = {
   getCompanies: async (req, res, next) => {
-    const page = parseInt(req.query.page);
     const filter = {};
     let sort = { registrationDate: -1 };
-    // if (req.query.province) {
-    //   filter.province = req.query.province;
-    // }
-    // if (req.query.age) {
-    //   const today = new Date();
-    //   const ageLimitDate = new Date(
-    //     today.getFullYear() - req.query.age,
-    //     today.getMonth(),
-    //     today.getDate()
-    //   );
-    //   filter.dateOfBirth = { $lte: ageLimitDate };
-    // }
-    // if (req.query.phone) {
-    //   filter.phoneNumber = { $size: 1 };
-    // }
-    // if (req.query.role) {
-    //   filter.roleInCompany = req.query.role;
-    // }
-    // if (req.query.gender) {
-    //   filter.gender = req.query.gender;
-    // }
-    // if (req.query.registeredLastWeek) {
-    //   const oneWeekAgo = new Date();
-    //   oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-    //   filter.registrationDate = { $gte: oneWeekAgo };
-    // }
-    // if (req.query.sortBy === "ageAsc") {
-    //   sort = { dateOfBirth: 1 };
-    // }
 
-    // // Sorting by age in descending order
-    // if (req.query.sortBy === "ageDesc") {
-    //   sort = { dateOfBirth: -1 };
-    // }
+    if (req.query.registeredLastTwoYears) {
+      const twoYearsAgo = new Date();
+      twoYearsAgo.setFullYear(twoYearsAgo.getFullYear() - 2);
+      filter.registrationDate = { $gte: twoYearsAgo };
+    }
+
     let companies;
-    const pageSize = 6;
-    const skipCount = (page - 1) * pageSize;
-    const resCompanies = await Company.find(filter);
-    const total = resCompanies.length;
-    if (page) {
-      companies = await Company.find(filter)
-        .sort(sort)
-        .skip(skipCount)
-        .limit(pageSize)
-        .select("-__v");
+    if (req.query.sortBy === "employeeCountDesc") {
+      companies = await Company.aggregate([
+        {
+          $lookup: {
+            from: "employees",
+            localField: "_id",
+            foreignField: "company",
+            as: "employees",
+          },
+        },
+        {
+          $addFields: {
+            employeeCount: { $size: "$employees" },
+          },
+        },
+        {
+          $sort: { employeeCount: -1 },
+        },
+      ]);
+    } else if (req.query.avgAge) {
+      const targetAvgAge = Number(req.query.avgAge);
+      companies = await Employee.aggregate([
+        {
+          $lookup: {
+            from: "companies",
+            localField: "company",
+            foreignField: "_id",
+            as: "company",
+          },
+        },
+        {
+          $unwind: "$company",
+        },
+        {
+          $group: {
+            _id: "$company._id",
+            avgAge: {
+              $avg: {
+                $divide: [
+                  { $subtract: [new Date(), "$dateOfBirth"] },
+                  31536000000,
+                ],
+              },
+            },
+            company: { $first: "$company" },
+          },
+        },
+        {
+          $match: {
+            avgAge: { $gte: targetAvgAge, $lt: targetAvgAge + 1 },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            name: "$company.name",
+            registrationNumber: "$company.registrationNumber",
+            province: "$company.province",
+            city: "$company.city",
+            landLineNumber: "$company.landLineNumber",
+            registrationDate: "$company.registrationDate",
+            avgAge: 1,
+          },
+        },
+      ]);
     } else {
       companies = await Company.find(filter)
         .sort(sort)
         .select("-__v");
     }
-    res.send({ page, total, data: companies });
+    const total = companies.length;
+    const page = parseInt(req.query.page);
+    const pageSize = 6;
+    const skipCount = (page - 1) * pageSize || 0;
+    if (page) {
+      res.send({
+        page,
+        total,
+        data: companies.slice(skipCount, skipCount + pageSize),
+      });
+    } else {
+      res.send({
+        page: "not-set",
+        total,
+        data: companies,
+      });
+    }
   },
   getCompanyById: async (req, res, next) => {
     res.send(req.company);
@@ -91,9 +135,9 @@ module.exports = {
       );
       return next(ex);
     }
-    const compnay = new Company(value);
-    await compnay.save();
-    res.status(201).send(compnay);
+    const company = new Company(value);
+    await company.save();
+    res.status(201).send(company);
   },
   updateCompany: async (req, res, next) => {
     const { error, value } = validateCompany(req.body);
