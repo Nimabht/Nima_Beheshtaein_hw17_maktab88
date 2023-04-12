@@ -58,7 +58,6 @@ const renderContainer = (
   }
   $(".page-link").on("click", function () {
     const page = this.id;
-    console.log(searchQuery);
     axios
       .get(`/api/employee/?page=${page}&${searchQuery}`)
       .then((response) => {

@@ -67,7 +67,7 @@ document
 
     console.log(`queryString is : ${queryString}`);
     axios
-      .get(`/api/employee?${queryString}`)
+      .get(`/api/employee?page=1&${queryString}`)
       .then((response) => {
         const data = response.data;
         renderContainer(data.data, data.total, 1, queryString);
