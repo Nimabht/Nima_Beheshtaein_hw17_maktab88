@@ -1,25 +1,22 @@
-const renderProfile = (id) => {
-  axios
-    .get(`/api/company/${id}`)
-    .then((response) => {
-      console.log(response.data);
-      const {
-        name,
-        registrationNumber,
-        registrationDate,
-        province,
-        city,
-        landLineNumber,
-        _id,
-      } = response.data;
-      const date = new Date(registrationDate);
-      const formattedDate = date.toLocaleDateString("en-US", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      });
-      $(".container").html(`<h2 class="my-3">Company Profile</h2>
+const renderProfile = async (id) => {
+  const response = await axios.get(`/api/company/${id}`);
+  const {
+    name,
+    registrationNumber,
+    registrationDate,
+    province,
+    city,
+    landLineNumber,
+    _id,
+  } = response.data;
+  const date = new Date(registrationDate);
+  const formattedDate = date.toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+  $(".container").html(`<h2 class="my-3">Company Profile</h2>
       <div class="container center">
         <div class="row mt-3">
           <div class="col-md-6">
@@ -87,6 +84,9 @@ const renderProfile = (id) => {
                 readonly />
             </div>
           </div>
+          <div class="col-md-6">
+          <table class="table mt-4 shadow p-5" id="employees-list"></table>
+          </div>
             <div
               class="form-group d-flex justify-content-center align-items-center h-75 gap-5 mt-4">
               <button
@@ -103,8 +103,20 @@ const renderProfile = (id) => {
           </div>
         </div>
       </div>`);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  $("#employees-list").html(`<thead class="table-primary">
+          <tr class="p-2">
+            <th class="p-2" scope="col">Employee name:</th>
+            <th class="p-2" scope="col">Profile</th>
+          </tr>
+        </thead>`);
+
+  const result = await axios.get(`/api/employee?companyId=${id}`);
+  const employeesOfTheCompany = result.data.data;
+  for (const employee of employeesOfTheCompany) {
+    const newRow = `<tr scope="row">
+        <td class="p-2" >${employee.firstname} ${employee.lastname}</td>
+        <td class="p-2" ><i class="bi bi-info-circle text-primary" onclick="window.location.href = 'http://localhost:1010/employee/profile/${employee._id}';"></i></td>
+    </tr>`;
+    $("#employees-list").append(newRow);
+  }
 };

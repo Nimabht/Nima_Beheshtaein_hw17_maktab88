@@ -5,3 +5,18 @@ body {
   background-size: cover;
   font-family: "Roboto", sans-serif;
 }
+table tr {
+  transition: all 0.2s ease-in-out;
+}
+
+table i {
+  cursor: pointer;
+  font-size: x-large;
+}
+.hover {
+  background-color: #c5c5c5ef !important;
+}
+
+#employees-list {
+  overflow: auto;
+}

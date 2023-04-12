@@ -41,6 +41,11 @@ module.exports = {
     if (req.query.sortBy === "ageDesc") {
       sort = { dateOfBirth: -1 };
     }
+    //check if companyId is in query
+    const companyId = req.query.companyId; // get companyId from query parameter
+    if (companyId) {
+      filter.company = companyId; // add company filter to query if companyId is provided
+    }
     const pageSize = 6;
     const skipCount = (page - 1) * pageSize;
     const resEmployees = await Employee.find(filter);
