@@ -24,6 +24,10 @@ table i {
   height: 80%;
 }
 
+.vh-90 {
+  height: 90vh;
+}
+
 .w-90 {
   width: 90%;
 }

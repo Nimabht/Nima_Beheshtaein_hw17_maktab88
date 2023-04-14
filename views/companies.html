@@ -25,65 +25,85 @@
     <link rel="stylesheet" href="/css/companies.css" />
     <title>Companies</title>
   </head>
-  <body
-    class="vh-100 d-flex flex-row justify-content-center align-items-center gap-4 p-4">
+  <body>
+    <nav
+      class="navbar navbar-expand-lg navbar-light bg-light px-4 py-2 rounded-bottom-5 w-75 m-auto"">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a
+            class="nav-link active"
+            href="http://localhost:1010/companies"
+            >Companies</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="http://localhost:1010/employees"
+            >Employees</a
+          >
+        </li>
+      </ul>
+    </nav>
     <div
-      class="container w-25 h-90 bg-light rounded-5 d-flex flex-column align-items-center gap-4">
-      <p class="display-4 my-3"><b>Filters</b></p>
-      <div class="form-group">
-        <input
-          type="text"
-          class="form-control"
-          id="srch-avgAge"
-          placeholder="Average age :" />
+      class="vh-90 d-flex flex-row justify-content-center align-items-center gap-4 p-4">
+      <div
+        class="container w-25 h-90 bg-light rounded-5 d-flex flex-column align-items-center gap-4">
+        <p class="display-4 my-3"><b>Filters</b></p>
+        <div class="form-group">
+          <input
+            type="text"
+            class="form-control"
+            id="srch-avgAge"
+            placeholder="Average age :" />
+        </div>
+        <div class="form-group">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            id="registeredLastTwoYears" />
+          <label
+            class="form-check-label"
+            for="srch-registeredLastTwoYears">
+            Registered in last two years:
+          </label>
+        </div>
+        <div
+          class="form-group border border-black rounded-3 p-3 w-75">
+          <p>Sort by number of employees:</p>
+          <input
+            type="radio"
+            id="srch-Asc"
+            name="sortBy"
+            value="employeeCountDesc" />
+            <label>Asc</label><br />
+          <input
+            type="radio"
+            id="srch-Desc"
+            name="sortBy"
+            value="employeeCountAsc" />
+            <label>Desc</label><br />
+        </div>
+        <div>
+          <button id="srch-submit" class="btn btn-success">
+            Apply
+          </button>
+          <button id="srch-reset" class="btn btn-dark">Reset</button>
+        </div>
       </div>
-      <div class="form-group">
-        <input
-          type="checkbox"
-          class="form-check-input"
-          id="registeredLastTwoYears" />
-        <label
-          class="form-check-label"
-          for="srch-registeredLastTwoYears">
-          Registered in last two years:
-        </label>
-      </div>
-      <div class="form-group border border-black rounded-3 p-3 w-75">
-        <p>Sort by number of employees:</p>
-        <input
-          type="radio"
-          id="srch-Asc"
-          name="sortBy"
-          value="employeeCountDesc" />
-          <label>Asc</label><br />
-        <input
-          type="radio"
-          id="srch-Desc"
-          name="sortBy"
-          value="employeeCountAsc" />
-          <label>Desc</label><br />
-      </div>
-      <div>
-        <button id="srch-submit" class="btn btn-success">
-          Apply
+      <div
+        class="container w-75 h-90 bg-light rounded-5 d-flex flex-column align-items-center">
+        <p class="display-4 my-3"><b>Companies</b></p>
+        <div class="w-90 h-50">
+          <table class="table shadow p-5"></table>
+        </div>
+        <button
+          class="btn btn-success mb-3 px-lg-5 mt-5"
+          onclick="window.location.href = '/company/new';">
+          New
         </button>
-        <button id="srch-reset" class="btn btn-dark">Reset</button>
+        <nav aria-label="Page navigation example ">
+          <ul class="pagination"></ul>
+        </nav>
       </div>
-    </div>
-    <div
-      class="container w-75 h-90 bg-light rounded-5 d-flex flex-column align-items-center">
-      <p class="display-4 my-3"><b>Companies</b></p>
-      <div class="w-90 h-50">
-        <table class="table shadow p-5"></table>
-      </div>
-      <button
-        class="btn btn-success mb-3 px-lg-5"
-        onclick="window.location.href = '/company/new';">
-        New
-      </button>
-      <nav aria-label="Page navigation example ">
-        <ul class="pagination"></ul>
-      </nav>
     </div>
   </body>
   <script

@@ -27,6 +27,10 @@ table i {
   width: 90%;
 }
 
+.vh-90 {
+  height: 90vh;
+}
+
 .hover {
   background-color: #c5c5c5ef !important;
 }
